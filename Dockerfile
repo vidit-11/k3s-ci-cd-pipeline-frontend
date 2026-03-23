@@ -13,14 +13,14 @@ RUN npm run build
 FROM nginxinc/nginx-unprivileged:alpine AS runtime
 WORKDIR /usr/share/nginx/html
 
+# Switch to root just to configure, then back to nginx
+USER root
+
 # Clear default assets
 RUN rm -rf ./*
 
 # Copy assets from builder
-COPY --from=builder /app/dist .
-
-# Switch to root just to configure, then back to nginx
-USER root
+COPY --from=builder /app/build .
 
 RUN printf 'server {\n\
     listen 8080;\n\

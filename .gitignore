@@ -24,11 +24,31 @@ bin/
 
 # === Node/React ===
 node_modules/
-frontend/node_modules/
 dist/
-frontend/build/
+build/
 .eslintcache
 npm-debug.log*
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+yarn-debug.log*
+yarn-error.log*
+
 
 # === OS Files ===
 .DS_Store

@@ -24,7 +24,7 @@ function App() {
 
   return (
     <div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'Arial' }}>
-      <h1>Springboot + React Integrated Pipeline V4!!</h1>
+      <h1>Springboot + React Integrated Pipeline V5!!</h1>
       <div style={{ padding: '20px', border: '1px solid #ccc', display: 'inline-block' }}>
         <p><strong>Server Status:</strong> {message}</p>
         <p style={{ fontSize: '12px', color: '#666' }}>(Auto-updating every 5 seconds)</p>

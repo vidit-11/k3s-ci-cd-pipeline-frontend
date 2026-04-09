@@ -1,0 +1,34 @@
+image: atlassian/default-image:3
+
+pipelines:
+  branches:
+    main:
+      - step:
+          name: Build and Push Docker Image
+          services:
+            - docker
+          caches:
+            - docker
+          script:
+            - export IMAGE_TAG=$BITBUCKET_BUILD_NUMBER
+            - echo "Building demo-erp-system-frontend with tag $IMAGE_TAG"
+            - echo $DOCKER_HUB_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+            - docker build -t vidit11/demo-erp-system-frontend:$IMAGE_TAG -t vidit11/demo-erp-system-frontend:latest .
+            - docker push vidit11/demo-erp-system-frontend:$IMAGE_TAG
+            - docker push vidit11/demo-erp-system-frontend:latest
+            - echo "export IMAGE_TAG=$IMAGE_TAG" >> set_env.sh
+          artifacts:
+            - set_env.sh # Pass the environment variable file to the next step
+
+      - step:
+          name: Update Staging Deployment Configuration
+          script:
+            - source set_env.sh
+            - git config --global user.name "CI/CD Pipeline"
+            - git config --global user.email "ci@yourdomain.com"
+            - git clone https://$GIT_USERNAME:$GIT_APP_PASSWORD@$CONFIG_REPO_URL config-repo
+            - cd config-repo
+            - sed -i "s|image: vidit11/demo-erp-system-frontend:.*|image: vidit11/demo-erp-system-frontend:$IMAGE_TAG|g" staging/deployment.yml
+            - git add staging/deployment.yml
+            - git commit -m "Update staging frontend image to tag $IMAGE_TAG [skip ci]"
+            - git push origin main
